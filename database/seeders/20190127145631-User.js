@@ -1,17 +1,26 @@
 'use strict';
+var bcrypt = require('bcrypt-nodejs')
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
     // Create Users Using Seed
+    var password = await bcrypt.hashSync('secret', bcrypt.genSaltSync(8))
+
     return queryInterface.bulkInsert('users', [{
       username: 'Tim',
-      password: 'secret'
+      password,
+      created_at: Sequelize.literal('NOW()'),
+      updated_at: Sequelize.literal('NOW()')
     },{
       username: 'Gibson',
-      password: 'secret'
+      password,
+      created_at: Sequelize.literal('NOW()'),
+      updated_at: Sequelize.literal('NOW()')
     },{
       username: 'Fauzaan',
-      password: 'secret'
+      password,
+      created_at: Sequelize.literal('NOW()'),
+      updated_at: Sequelize.literal('NOW()')
     }], {});
   },
 
