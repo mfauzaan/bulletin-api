@@ -12,6 +12,7 @@ const auth = require('../app/middleware/auth');
 
 // Import Routes
 var postRoute = require('./posts');
+var commentRoute = require('./comments');
 
 /* Home Route */
 router.get('/', function(req, res) {
@@ -20,6 +21,7 @@ router.get('/', function(req, res) {
 });
 
 // Mount Routes
-router.use(`${apiPrefix}`, auth.basic, postRoute);
+router.use(`${apiPrefix}`, postRoute);
+router.use(`${apiPrefix}`, commentRoute);
 
 module.exports = router;

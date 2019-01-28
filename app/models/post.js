@@ -10,7 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: 'updated_at',
   });
   Post.associate = function(models) {
-    // associations can be defined here
+    // associations
+      Post.hasMany(models.Comment, {
+        foreignKey: 'post_id',
+      });
   };
+
   return Post;
 };
+
+
