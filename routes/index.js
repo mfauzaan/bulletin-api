@@ -1,27 +1,22 @@
 'use strict'
 
-// Declarations
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// Variables
-const apiVersion = process.env.API_VERSION
-const apiPrefix = process.env.API_PREFIX
-
-/*
-|--------------------------------------------------------------------------
-| Index Routes
-|--------------------------------------------------------------------------
-|
-| Http routes are entry points to your web application. You can create
-| routes for different URL's and bind Controller actions to them.
-|
-*/
+// Configuration
+const apiVersion = 1
+const apiPrefix = `/api/v${apiVersion}`
 
 /* Home Route */
 router.get('/', function(req, res) {
   // Send details of the Appilcation to Homescreen
-  res.send({ application: 'Bulletin API', version: apiVersion, owner: 'https://socar.my' })
+  res.send({ application: 'Bulletin API', version: 1, owner: 'https://socar.my' })
 });
+
+// Import Routes
+var postRoute = require('./posts');
+
+// Mount Routes
+router.use(`${apiPrefix}`, postRoute);
 
 module.exports = router;

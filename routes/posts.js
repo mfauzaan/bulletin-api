@@ -4,10 +4,6 @@
 var express = require('express');
 var router = express.Router();
 
-// Variables
-const apiVersion = 1
-const apiPrefix = `/api/v${apiVersion}`
-
 // Image Upload
 var multer  = require('multer')
 var storage = multer.diskStorage({
@@ -34,11 +30,10 @@ var upload = multer({ storage })
 const PostController = require('../app/controllers').post;
 
 // Resource Routes of Posts
-router.get(`${apiPrefix}/posts`, PostController.index);
-router.get(`${apiPrefix}/posts/:id`, PostController.show);
-router.post(`${apiPrefix}/posts`, upload.single('image'),  PostController.store);
-router.put(`${apiPrefix}/posts/:id`, upload.single('image'), PostController.update);
-router.delete(`${apiPrefix}/posts/:id`, PostController.destroy);
-
+router.get('/posts', PostController.index);
+router.get('/posts/:id', PostController.show);
+router.post('/posts', upload.single('image'),  PostController.store);
+router.put('/posts/:id', upload.single('image'), PostController.update);
+router.delete('/posts/:id', PostController.destroy);
 
 module.exports = router;
