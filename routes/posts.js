@@ -31,7 +31,7 @@ var upload = multer({ storage })
 |
 */
 // Declare Controller
-const PostController = require('../controllers').post;
+const PostController = require('../app/controllers').post;
 
 // Resource Routes of Posts
 router.get(`${apiPrefix}/posts`, PostController.index);
