@@ -2,6 +2,7 @@
 
 const Comment = require('../models').Comment;
 const Post = require('../models').Post;
+const APIError = require('../../helpers/APIError');
 
 // Exports CRUD Operations as Comment Controller
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
     })
 
     // Send response to the route
-    res.send(post)
+    res.send(post.Comments)
   },
 
 
@@ -52,7 +53,7 @@ module.exports = {
     })
 
     // Return response
-    res.send(comment)
+    res.status(200).json({ title: 'Success', message: 'Comment has been added successfully', data: comment });
   },
 
   /**
@@ -72,7 +73,7 @@ module.exports = {
     })
 
     // Perform update request
-    res.send(comment)
+    res.status(200).json({ title: 'Updated', message: 'Comment has been updated successfully', data: comment });
   },
 
   /**
@@ -86,12 +87,13 @@ module.exports = {
     const comment = await Comment.findById(id)
 
     if (!comment) {
-      return res.send({ title: 'Delete Failed', message: 'Selected comment cannot found' })
+      return res.status(422).json({ title: 'Delete Failed', message: 'Selected comment cannot found' });
     }
+
     // Delete post
     await comment.destroy()
 
     // return response
-    res.send(comment)
+    res.status(200).json({ title: 'Successfully', message: 'Comment has been deleted successfully', data: comment });
   }
 };
