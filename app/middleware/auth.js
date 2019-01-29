@@ -1,7 +1,6 @@
 'use strict'
 
 module.exports.basic = async function (req, res, next) {
-  const auth = require('basic-auth');
   var bcrypt = require('bcrypt-nodejs')
   const User = require('../models').User;
    // Grab the "Authorization" header.
@@ -25,25 +24,10 @@ module.exports.basic = async function (req, res, next) {
     
      if (credentials[0] === user.username && bcrypt.compareSync(credentials[1], user.password)) {
        // The username and password are correct, so the user is authorized.
-       return res.send("Access Granted!");
+       return next();
      } else {
        // The user typed in the username or password wrong.
        return res.status(403).send("Access Denied (incorrect credentials)");
      }
    }
-
-  
-  // Find User
-  const user = User.findAll({ limit: 1, where: { username: request.headers.authorization } })
-
-  console.log(user);
-  
-  /* const match = await bcrypt.compare(password, user.passwordHash);
-
-
-  if (!user || !admins[user.name] || admins[user.name].password !== user.pass) {
-    response.set('WWW-Authenticate', 'Basic realm="example"');
-    return response.status(401).send();
-  } */
-  return next();
 };
