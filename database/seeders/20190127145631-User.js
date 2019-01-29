@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt-nodejs')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // Create Users Using Seed
-    var password = await bcrypt.hashSync('secret', process.env.APP_KEY)
+    var password = await bcrypt.hashSync('secret', bcrypt.genSaltSync(10))
 
     return queryInterface.bulkInsert('users', [{
       username: 'Tim',

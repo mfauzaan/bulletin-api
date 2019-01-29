@@ -1,13 +1,13 @@
 'use strict'
 const path = require('path');
+
 //const replace = require('replace-in-file');
 async function keyGenerator() {
   var fs = require('fs')
+  var bcrypt = require('bcrypt-nodejs')
 
-  var uniqid = require('uniqid');
+  var uniqid = await bcrypt.genSaltSync(10)
 
-  var uniqid = await uniqid()+uniqid()
-  console.log(uniqid)
   fs.readFile('.env', 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
