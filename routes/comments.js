@@ -16,7 +16,7 @@ var router = express.Router();
 // Declare Controller & Validator
 const CommentController = require('../app/controllers').comment;
 const CommentValidator = require('../app/validators/comment')
-const validationResultHandler = require('../helpers/validationResultHandler')
+const validationResultHandler = require('../app/helpers/validationResultHandler')
 
 // Nested Resource Routes for comments
 router.get('/posts/:post_id/comments', CommentController.index);

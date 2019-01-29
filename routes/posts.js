@@ -28,9 +28,10 @@ var upload = multer({ storage })
 */
 // Declare Controller
 const PostController = require('../app/controllers').post;
+const auth = require('../app/middleware/auth')
 
 // Resource Routes of Posts
-router.get('/posts', PostController.index);
+router.get('/posts', auth.basic, PostController.index);
 router.get('/posts/:id', PostController.show);
 router.post('/posts', upload.single('image'),  PostController.store);
 router.put('/posts/:id', upload.single('image'), PostController.update);

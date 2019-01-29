@@ -2,9 +2,8 @@
 
 const Comment = require('../models').Comment;
 const Post = require('../models').Post;
-const APIError = require('../../helpers/APIError');
 
-// Exports CRUD Operations as Comment Controller
+// Exports Comment Controller
 module.exports = {
 
   /**
