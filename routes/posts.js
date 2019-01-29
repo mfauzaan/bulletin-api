@@ -3,6 +3,7 @@
 // Declarations
 var express = require('express');
 var router = express.Router();
+var slugify = require('slugify')
 
 // Image Upload
 var multer = require('multer')
@@ -11,7 +12,7 @@ var storage = multer.diskStorage({
     cb(null, 'public/uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname)
+    cb(null, Date.now() + slugify(file.originalname, '_'))
   }
 })
 
