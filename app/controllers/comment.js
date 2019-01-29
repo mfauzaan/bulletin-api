@@ -43,7 +43,7 @@ module.exports = {
       const { id } = req.params
 
       // Query Comment using provided ID
-      const comment = await Comment.findById(id)
+      const comment = await Comment.findByPk(id)
 
       // Return response
       res.send(comment)
@@ -101,7 +101,7 @@ module.exports = {
       const { id } = req.params
 
       // Find Post from Database
-      const comment = await Comment.findById(id)
+      const comment = await Comment.findByPk(id)
 
       // Perform Update request
       await comment.update({
@@ -132,7 +132,7 @@ module.exports = {
       const { id } = req.params
 
       // Query post using provided id
-      const comment = await Comment.findById(id)
+      const comment = await Comment.findByPk(id)
 
       // Delete post
       await comment.destroy()
