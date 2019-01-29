@@ -5,13 +5,13 @@ exports.validate = (method) => {
   switch (method) {
     case 'store': {
       return [
-        body('content', 'Content Field is required').exists(),
+        body('content', 'This action requires the field to be specified').exists(),
       ]
     }
 
     case 'update': {
       return [
-        body('content', 'Content Field is required').exists(),
+        body('content', 'This action requires the field to be specified').exists(),
       ]
     }
   }

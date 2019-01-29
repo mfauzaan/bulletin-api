@@ -23,7 +23,7 @@ const auth = require('../app/middleware/auth')
 router.get('/posts/:post_id/comments', auth.basic, CommentController.index);
 router.get('/posts/:post_id/comments/:id', auth.basic, CommentController.show);
 router.post('/posts/:post_id/comments', [CommentValidator.validate('store'), validationResultHandler.validationResultHandler, auth.basic], CommentController.store);
-router.put('/posts/:post_id/comments/:id', auth.basic, CommentController.update);
+router.put('/posts/:post_id/comments/:id',  [CommentValidator.validate('update'), validationResultHandler.validationResultHandler, auth.basic], CommentController.update);
 router.delete('/posts/:post_id/comments/:id', auth.basic, CommentController.destroy);
 
 module.exports = router;

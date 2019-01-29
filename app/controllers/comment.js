@@ -47,12 +47,13 @@ module.exports = {
 
     // perform Create Query
     const comment = await Comment.create({
+      user_id: req.auth.id,
       content,
       post_id
     })
 
     // Return response
-    res.status(200).json({ title: 'Success', message: 'Comment has been added successfully', data: comment });
+    res.status(200).json({ message: 'Comment has been added successfully', data: comment });
   },
 
   /**
@@ -72,27 +73,33 @@ module.exports = {
     })
 
     // Perform update request
-    res.status(200).json({ title: 'Updated', message: 'Comment has been updated successfully', data: comment });
+    res.status(200).json({ message: 'Comment has been updated successfully', data: comment });
   },
 
   /**
    * Remove the specified Comment from DB.
    */
   async destroy(req, res) {
-    // Get Required parameters
-    const { id } = req.params
+    try {
+      // Get Required parameters
+      const { id } = req.params
 
-    // Query post using provided id
-    const comment = await Comment.findById(id)
+      // Query post using provided id
+      const comment = await Comment.findById(id)
 
-    if (!comment) {
-      return res.status(422).json({ title: 'Delete Failed', message: 'Selected comment cannot found' });
+      // Delete post
+      await comment.destroy()
+
+      // return response
+      res.status(200).json({ message: 'Comment has been deleted successfully', data: comment });
+    } catch (error) {
+      res.status(500).json({
+        errors:
+        {
+          "code": "DELETION_FAILED",
+          "message": "The comment could not be deleted",
+        }
+      })
     }
-
-    // Delete post
-    await comment.destroy()
-
-    // return response
-    res.status(200).json({ title: 'Successfully', message: 'Comment has been deleted successfully', data: comment });
   }
 };

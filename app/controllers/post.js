@@ -25,7 +25,7 @@ module.exports = {
     const { id } = req.params
 
     // Query Post using parameter ID
-    const post = await Post.findById(id)
+    const post = await Post.findByPk(id)
 
     // Send request to Database
     res.send(post)
@@ -44,11 +44,11 @@ module.exports = {
       user_id: req.auth.id,
       title,
       content,
-      image_url: req.file.path,
+      image_url: `/${req.file.filename}`,
     })
 
     // Return response
-    res.send(post)
+    res.status(200).json({ message: 'Post has been added successfully', data: post });
   },
 
   /**
@@ -59,31 +59,41 @@ module.exports = {
     const { title, content } = req.body
     const { id } = req.params
     // Find Post from Database
-    const post = await Post.findById(id)
+    const post = await Post.findByPk(id)
 
     // Perform Update request
     await post.update({
-      title, content, image_url: req.file.path || post.image_url
+      title, content, image_url: `/${req.file.filename}` || post.image_url
     })
 
     // Perform update request
-    res.send(post)
+    res.status(200).json({ message: 'Comment has been updated successfully', data: post });
   },
 
   /**
    * Remove the specified post from DB.
    */
   async destroy(req, res) {
-    // Get Required parameters
-    const { id } = req.params
+    try {
+      // Get Required parameters
+      const { id } = req.params
 
-    // Query post using provided id
-    const post = await Post.findById(id)
+      // Query post using provided id
+      const post = await Post.findByPk(id)
 
-    // Delete post
-    await post.destroy()
+      // Delete post
+      await post.destroy()
 
-    // return response
-    res.send(post)
+      // return response
+      res.status(200).json({ message: 'Comment has been deleted successfully', data: post });
+    } catch (error) {
+      res.status(500).json({
+        errors:
+        {
+          "code": "DELETION_FAILED",
+          "message": "The post could not be deleted",
+        }
+      })
+    }
   }
 };

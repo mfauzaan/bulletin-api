@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+    getterMethods: {
+      image_url: function () {
+          return process.env.IMAGE_BASE_URL+this.getDataValue('image_url')
+      }
+  },
   });
   Post.associate = function(models) {
     // associations
@@ -15,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'post_id',
       });
   };
-
+  
   return Post;
 };
 
