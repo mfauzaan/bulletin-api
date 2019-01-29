@@ -17,12 +17,13 @@ var router = express.Router();
 const CommentController = require('../app/controllers').comment;
 const CommentValidator = require('../app/validators/comment')
 const validationResultHandler = require('../app/helpers/validationResultHandler')
+const auth = require('../app/middleware/auth')
 
 // Nested Resource Routes for comments
-router.get('/posts/:post_id/comments', CommentController.index);
-router.get('/posts/:post_id/comments/:id', CommentController.show);
-router.post('/posts/:post_id/comments', [CommentValidator.validate('store'), validationResultHandler.validationResultHandler], CommentController.store);
-router.put('/posts/:post_id/comments/:id', CommentController.update);
-router.delete('/posts/:post_id/comments/:id', CommentController.destroy);
+router.get('/posts/:post_id/comments', auth.basic, CommentController.index);
+router.get('/posts/:post_id/comments/:id', auth.basic, CommentController.show);
+router.post('/posts/:post_id/comments', [CommentValidator.validate('store'), validationResultHandler.validationResultHandler, auth.basic], CommentController.store);
+router.put('/posts/:post_id/comments/:id', auth.basic, CommentController.update);
+router.delete('/posts/:post_id/comments/:id', auth.basic, CommentController.destroy);
 
 module.exports = router;

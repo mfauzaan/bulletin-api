@@ -5,13 +5,13 @@ var express = require('express');
 var router = express.Router();
 
 // Image Upload
-var multer  = require('multer')
+var multer = require('multer')
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now()+file.originalname)
+    cb(null, Date.now() + file.originalname)
   }
 })
 
@@ -29,12 +29,14 @@ var upload = multer({ storage })
 // Declare Controller
 const PostController = require('../app/controllers').post;
 const auth = require('../app/middleware/auth')
+const PostValidator = require('../app/validators/post')
+const validationResultHandler = require('../app/helpers/validationResultHandler')
 
 // Resource Routes of Posts
 router.get('/posts', auth.basic, PostController.index);
-router.get('/posts/:id', PostController.show);
-router.post('/posts', upload.single('image'),  PostController.store);
-router.put('/posts/:id', upload.single('image'), PostController.update);
-router.delete('/posts/:id', PostController.destroy);
+router.get('/posts/:id', auth.basic, PostController.show);
+router.post('/posts', [upload.single('image'), PostValidator.validate('store'), validationResultHandler.validationResultHandler, auth.basic], PostController.store);
+router.put('/posts/:id', [upload.single('image'), PostValidator.validate('update'), validationResultHandler.validationResultHandler, auth.basic], PostController.update);
+router.delete('/posts/:id', auth.basic, PostController.destroy);
 
 module.exports = router;

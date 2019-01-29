@@ -41,9 +41,10 @@ module.exports = {
 
     // perform Create Query
     const post = await Post.create({
+      user_id: req.auth.id,
       title,
       content,
-      image_url: request.file.path,
+      image_url: req.file.path,
     })
 
     // Return response
@@ -56,10 +57,10 @@ module.exports = {
   async update(req, res) {
     // Get required Body
     const { title, content } = req.body
-    const { id } = req.params 
+    const { id } = req.params
     // Find Post from Database
     const post = await Post.findById(id)
-    
+
     // Perform Update request
     await post.update({
       title, content, image_url: req.file.path || post.image_url
