@@ -55,19 +55,30 @@ module.exports = {
    * Update the specified post in DB.
    */
   async update(req, res) {
-    // Get required Body
-    const { title, content } = req.body
-    const { id } = req.params
-    // Find Post from Database
-    const post = await Post.findByPk(id)
+    try {
+      // Get required Body
+      const { title, content } = req.body
+      const { id } = req.params
+      // Find Post from Database
+      const post = await Post.findByPk(id)
 
-    // Perform Update request
-    await post.update({
-      title, content, image_url: `/${req.file.filename}` || post.image_url
-    })
+      // Perform Update request
+      await post.update({
+        title, content, image_url: `/${req.file.filename}` || post.image_url
+      })
 
-    // Perform update request
-    res.status(200).json({ message: 'Comment has been updated successfully', data: post });
+      // Perform update request
+      res.status(200).json({ message: 'Post has been updated successfully', data: post });
+    } catch (error) {
+      res.status(500).json({
+        errors:
+        {
+          "code": "UPDATE_FAILED",
+          "message": "The post could not be updated",
+        }
+      })
+    }
+
   },
 
   /**
@@ -85,7 +96,7 @@ module.exports = {
       await post.destroy()
 
       // return response
-      res.status(200).json({ message: 'Comment has been deleted successfully', data: post });
+      res.status(200).json({ message: 'Post has been deleted successfully', data: post });
     } catch (error) {
       res.status(500).json({
         errors:

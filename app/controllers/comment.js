@@ -10,15 +10,27 @@ module.exports = {
    * Display a listing of the comments.
    */
   async index(req, res) {
-    // Query Post using Provided ID
-    // with related Comments
-    const post = await Post.findOne({
-      where: { id: req.params.post_id },
-      include: [{ model: Comment }]
-    })
+    try {
+      // Query Post using Provided ID
+      // with related Comments
+      const post = await Post.findOne({
+        where: { id: req.params.post_id },
+        include: [{ model: Comment }]
+      })
 
-    // Send response to the route
-    res.send(post.Comments)
+      // Send response to the route
+      res.send(post.Comments)
+    } catch (error) {
+      // Send response to the route
+      res.status(500).json({
+        errors:
+        {
+          "code": "QUERY_FAILED",
+          "message": "Failed to find the post",
+        }
+      })
+    }
+
   },
 
 
@@ -26,14 +38,26 @@ module.exports = {
    * Display the specified Comment.
    */
   async show(req, res) {
-    // Find required parameter
-    const { id } = req.params
+    try {
+      // Find required parameter
+      const { id } = req.params
 
-    // Query Comment using provided ID
-    const comment = await Comment.findById(id)
+      // Query Comment using provided ID
+      const comment = await Comment.findById(id)
 
-    // Return response
-    res.send(comment)
+      // Return response
+      res.send(comment)
+    } catch (error) {
+      // Send response to the route
+      res.status(500).json({
+        errors:
+        {
+          "code": "QUERY_FAILED",
+          "message": "Failed to find the post",
+        }
+      })
+    }
+
   },
 
 
@@ -41,39 +65,62 @@ module.exports = {
    * Store a newly created Comment in DB.
    */
   async store(req, res) {
-    // Get required parametrs
-    const { content } = req.body
-    const { post_id } = req.params
+    try {
+      // Get required parametrs
+      const { content } = req.body
+      const { post_id } = req.params
 
-    // perform Create Query
-    const comment = await Comment.create({
-      user_id: req.auth.id,
-      content,
-      post_id
-    })
+      // perform Create Query
+      const comment = await Comment.create({
+        user_id: req.auth.id,
+        content,
+        post_id
+      })
 
-    // Return response
-    res.status(200).json({ message: 'Comment has been added successfully', data: comment });
+      // Return response
+      res.status(200).json({ message: 'Comment has been added successfully', data: comment });
+    } catch (error) {
+      res.status(500).json({
+        errors:
+        {
+          "code": "QUERY_FAILED",
+          "message": "Failed to find the post",
+        }
+      })
+    }
+
   },
 
   /**
    * Update the specified Comment in DB.
    */
   async update(req, res) {
-    // Get required Body
-    const { content } = req.body
-    const { id } = req.params
+    try {
+      // Get required Body
+      const { content } = req.body
+      const { id } = req.params
 
-    // Find Post from Database
-    const comment = await Comment.findById(id)
+      // Find Post from Database
+      const comment = await Comment.findById(id)
 
-    // Perform Update request
-    await comment.update({
-      content
-    })
+      // Perform Update request
+      await comment.update({
+        content
+      })
 
-    // Perform update request
-    res.status(200).json({ message: 'Comment has been updated successfully', data: comment });
+      // Perform update request
+      res.status(200).json({ message: 'Comment has been updated successfully', data: comment });
+    } catch (error) {
+      // Send response to the route
+      res.status(500).json({
+        errors:
+        {
+          "code": "QUERY_FAILED",
+          "message": "Failed to find the post",
+        }
+      })
+    }
+
   },
 
   /**
