@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: 'updated_at',
     getterMethods: {
       image_url: function () {
+        if (!this.getDataValue('image_url')) {
+          return this.getDataValue('image_url')
+        } else {
           return process.env.IMAGE_BASE_URL+this.getDataValue('image_url')
+        }
       }
   },
   });

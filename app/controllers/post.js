@@ -38,13 +38,19 @@ module.exports = {
   async store(req, res) {
     // Get required parametrs
     const { title, content } = req.body
+    // if file name not found use null
+    try {
+      var image_url = `/${req.file.filename}`
+    } catch (error) {
+      var image_url = null
+    }
 
     // perform Create Query
     const post = await Post.create({
       user_id: req.auth.id,
       title,
       content,
-      image_url: `/${req.file.filename}`,
+      image_url
     })
 
     // Return response
@@ -62,9 +68,15 @@ module.exports = {
       // Find Post from Database
       const post = await Post.findByPk(id)
 
+      try {
+        var image_url = `/${req.file.filename}`
+      } catch (error) {
+        var image_url = `/${post.image_url}`
+      }
+
       // Perform Update request
       await post.update({
-        title, content, image_url: `/${req.file.filename}` || post.image_url
+        title, content, image_url
       })
 
       // Perform update request
