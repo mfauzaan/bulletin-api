@@ -1,6 +1,7 @@
 'use strict';
 
 const Post = require('../models').Post;
+const Comment = require('../models').Comment;
 
 // Exports CRUD Operations as Post Controller
 module.exports = {
@@ -106,6 +107,8 @@ module.exports = {
 
       // Delete post
       await post.destroy()
+      // Delete Related comments
+      await Comment.destroy({ where: { post_id: null }})
 
       // return response
       res.status(200).json({ message: 'Post has been deleted successfully', data: post });
